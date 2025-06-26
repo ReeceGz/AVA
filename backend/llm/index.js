@@ -2,6 +2,12 @@ const axios = require('axios');
 require('dotenv').config();
 
 const TOGETHER_API_KEY = process.env.TOGETHER_API_KEY;
+
+if (!TOGETHER_API_KEY) {
+  const msg = 'Missing TOGETHER_API_KEY. Please set it in your environment variables.';
+  console.error(msg);
+  throw new Error(msg);
+}
 const TOGETHER_MODEL   = 'meta-llama/Llama-3-8b-chat-hf';
 
 // — Personality prompt
