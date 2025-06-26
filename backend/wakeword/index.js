@@ -1,26 +1,48 @@
-const { PvPorcupine, BuiltinKeyword } = require('@picovoice/porcupine-node');
-const { PvRecorder } = require('@picovoice/pvrecorder-node');
+require('dotenv').config();
+const path = require('path');
+const { Porcupine }        = require('@picovoice/porcupine-node');
+const { PvRecorder }       = require('@picovoice/pvrecorder-node');
 
-let porcupine = null;
-let recorder = null;
+let porcupine;
+let recorder;
 
 async function initWakeWord(callback) {
   try {
-    porcupine = await PvPorcupine.create([BuiltinKeyword.AVA]);
+    const accessKey = process.env.PICOVOICE_ACCESS_KEY;
+    if (!accessKey) throw new Error('Missing PICOVOICE_ACCESS_KEY in .env');
+
+    // Initialize Porcupine with custom keyword
+    porcupine = new Porcupine(
+      accessKey,
+      [ path.join(__dirname, 'AVA.ppn') ],
+      [ 0.5 ]
+    );
+
+    // Initialize recorder
     recorder = new PvRecorder(porcupine.frameLength);
-    recorder.start();
+    await recorder.start();
 
-    console.log('[🎙️] Wake word listener initialized (say "Hey AVA")');
+    console.log('[WAKE] Wake word listener initialized (say "Hey AVA")');
 
-    recorder.on('frame', pcm => {
-      const keywordIndex = porcupine.process(pcm);
-      if (keywordIndex >= 0) {
-        console.log('[👂] Wake word detected!');
-        callback();
+    // === Async loop instead of recorder.on ===
+    (async () => {
+      while (true) {
+        try {
+          const pcm = await recorder.read();           // :contentReference[oaicite:0]{index=0}
+          const idx = porcupine.process(pcm);
+          if (idx >= 0) {
+            console.log('[DETECT] Wake word detected!');
+            callback();
+          }
+        } catch (readError) {
+          console.error('[ERROR] Recorder read error:', readError);
+          break;
+        }
       }
-    });
+    })();
+
   } catch (err) {
-    console.error('[❌] Wake word error:', err);
+    console.error('[ERROR] Wake word error:', err);
   }
 }
 

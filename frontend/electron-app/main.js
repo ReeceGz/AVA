@@ -1,11 +1,12 @@
+// frontend/electron-app/main.js
+
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
-const { speak } = require('../../backend/tts');
-const { queryLLM } = require('../../backend/llm');
-const { saveToMemory } = require('../../backend/memory/sqlite');
+const { init, handleVoice } = require('../../backend');
 
+let win;
 function createWindow() {
-  const win = new BrowserWindow({
+  win = new BrowserWindow({
     width: 900,
     height: 700,
     webPreferences: {
@@ -13,23 +14,39 @@ function createWindow() {
       contextIsolation: true
     }
   });
-
-  win.loadFile('frontend/electron-app/index.html');
+  win.loadFile(path.join(__dirname, 'index.html'));
 }
 
 app.whenReady().then(() => {
   createWindow();
-
-  app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow();
-  });
+  init(win);
 });
 
-ipcMain.handle('jarvis:query', async (_, prompt) => {
+// Text query handler
+ipcMain.handle('ava:query', async (_, prompt) => {
+  const { queryLLM } = require('../../backend/llm');
+  const { speak }    = require('../../backend/tts');
+  const { saveToMemory } = require('../../backend/memory/sqlite');
   const response = await queryLLM(prompt);
   speak(response);
   saveToMemory(prompt, response);
   return response;
+});
+
+// Voice handler
+ipcMain.handle('ava:voice', async () => {
+  await handleVoice();
+});
+
+// Play music handler
+ipcMain.handle('ava:play-music', async (_, query) => {
+  console.log('[Main] play-music handler called with:', query);
+  const { playLocal, playYouTube } = require('../../backend/tools/playMusic');
+  if (query && query.trim()) {
+    playYouTube(query.trim());
+  } else {
+    playLocal();
+  }
 });
 
 app.on('window-all-closed', () => {

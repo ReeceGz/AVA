@@ -1,22 +1,32 @@
+<!-- frontend/electron-app/index.html -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>A.V.A: Adaptive Virtual Assistant</title>
   <style>
-    body { font-family: Arial, sans-serif; background: #111; color: #eee; padding: 20px; }
-    textarea { width: 100%; height: 80px; background: #222; color: #fff; padding: 10px; }
-    button { margin-top: 10px; padding: 10px; background: #007bff; border: none; color: white; cursor: pointer; }
-    #log { margin-top: 20px; border: 1px solid #444; padding: 10px; height: 300px; overflow-y: auto; background: #1a1a1a; }
+    body { font-family: Arial, sans-serif; background:#111; color:#eee; padding:20px }
+    textarea, button, input { width:100%; margin-top:10px; padding:10px; box-sizing:border-box; }
+    #log { margin-top:20px; border:1px solid #444; padding:10px; height:300px; overflow-y:auto; background:#1a1a1a; }
+    button { background:#007bff; border:none; color:#fff; cursor:pointer; border-radius:4px; }
   </style>
 </head>
 <body>
   <h1>A.V.A</h1>
-  <p>Ask me anything:</p>
+
+  <p>Text input:</p>
   <textarea id="input"></textarea>
-  <button onclick="askAVA()">Send</button>
+  <button onclick="askAva()">Send Text</button>
+  <button id="voiceBtn">🎤 Speak (or say “Hey AVA”)</button>
+
+  <h2>Music</h2>
+  <input id="track" placeholder="YouTube search or leave blank"/>
+  <button id="playBtn">🎶 Play Music</button>
+
   <div id="log"></div>
+
   <script src="renderer.js"></script>
 </body>
 </html>
