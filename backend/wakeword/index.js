@@ -46,4 +46,21 @@ async function initWakeWord(callback) {
   }
 }
 
-module.exports = { initWakeWord };
+async function stopWakeWord() {
+  try {
+    if (recorder) {
+      await recorder.stop();
+      recorder.release();
+      recorder = null;
+    }
+    if (porcupine) {
+      porcupine.release();
+      porcupine = null;
+    }
+    console.log('[WAKE] Wake word listener stopped');
+  } catch (err) {
+    console.error('[ERROR] Failed to stop wake word:', err);
+  }
+}
+
+module.exports = { initWakeWord, stopWakeWord };
