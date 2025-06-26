@@ -47,3 +47,7 @@ pnpm-debug.log*
 # Mac/Linux
 *.pid
 *.seed
+
+# Media and memory files
+/response.mp3
+/AVA_memory.db
