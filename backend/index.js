@@ -19,7 +19,10 @@ const { getVolume, setVolume } = require('loudness');
 
 // === Configuration ===
 const STT_DIR     = path.join(__dirname, 'stt');
-const MODEL_PATH  = path.join(STT_DIR, 'models', 'ggml-base.en.bin');
+// Whisper.cpp expects the model in the same folder as the binary
+// The repository ships the model file directly under /backend/stt
+// rather than inside a "models" subdirectory.
+const MODEL_PATH  = path.join(STT_DIR, 'ggml-base.dll');
 const WHISPER_CLI = path.join(STT_DIR, 'whisper.exe');
 
 let mainWindow = null;
