@@ -1,0 +1,22 @@
+{
+  "name": "jarvis-hybrid",
+  "version": "1.0.0",
+  "description": "Hybrid AI assistant with LLaMA 3, ElevenLabs, Whisper, and Electron",
+  "main": "frontend/electron-app/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "nodemon backend/index.js"
+  },
+  "dependencies": {
+    "axios": "^1.6.7",
+    "dotenv": "^16.3.1",
+    "node-fetch": "^3.3.2",
+    "node-record-lpcm16": "^1.0.1",
+    "openai": "^4.20.1",
+    "sqlite3": "^5.1.6"
+  },
+  "devDependencies": {
+    "electron": "^29.0.0",
+    "nodemon": "^3.1.0"
+  }
+}

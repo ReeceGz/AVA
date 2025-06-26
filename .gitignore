@@ -1,0 +1,49 @@
+# Node modules
+node_modules/
+**/node_modules/
+
+# Environment & config
+.env
+.env.local
+.env.*.local
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Whisper binaries & CLIs
+/backend/stt/whisper.exe
+/backend/stt/whisper-whisper.exe
+/backend/stt/whisper-cli.exe
+
+# Whisper model files (re-download via script)
+/backend/stt/models/
+
+# Transcription outputs
+**/*.txt
+
+# Incoming folder (auto-processed audio)
+/backend/stt/incoming/
+
+# Electron build / distribution
+/dist/
+/build/
+/release/
+*.exe
+
+# IDEs and editors
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Mac/Linux
+*.pid
+*.seed
